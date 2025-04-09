@@ -40,6 +40,12 @@ include './controlador/controlador.php';
             <td><?= $row['accion'] ?></td>
             <td><?= $row['Nombre'] ?></td>
             <td><?= $row['Nick'] ?></td>
+            <td>
+                <form action="eliminar.php" method="POST" style="margin: 0;">
+                    <input type="hidden" name="id_b" value="<?= $row['Id_b'] ?>">
+                    <button type="submit" style="color: red; border: none; background: none; cursor: pointer;">Eliminar</button>
+                </form>
+            </td>
         </tr>
         <?php endforeach; ?>
     </table>

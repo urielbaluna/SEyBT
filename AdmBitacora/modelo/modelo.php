@@ -37,4 +37,11 @@ function obtenerRegistrosBitacora($conn, $buscar = null) {
     $stmt->close();
     return $registros;
 }
+
+function eliminarRegistroBitacora($conn, $id_b) {
+    $sql = "DELETE FROM bitacora WHERE Id_b = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('i', $id_b);
+    return $stmt->execute();
+}
 ?>

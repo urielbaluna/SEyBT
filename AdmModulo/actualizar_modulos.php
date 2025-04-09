@@ -1,8 +1,14 @@
 <?php
 include_once '../config/conexion.php';
 
+session_start();
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $perfil = $_POST['perfil'];
+
+    if (!isset($_SESSION['usuario'])) {
+        die("Error: Usuario no autenticado.");
+    }
 
     // Obtener el ID del perfil
     $sql = "SELECT Id_p FROM perfil WHERE Nombre = ?";
@@ -11,8 +17,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute();
     $result = $stmt->get_result();
     $row = $result->fetch_assoc();
-    $id_p = $row['Id_p'];
+    $id_p = $row['Id_p'] ?? null;
     $stmt->close();
+
+    if (!$id_p) {
+        die("Error: No se encontró el perfil en la base de datos.");
+    }
 
     // Eliminar los módulos actuales del perfil
     $sql = "DELETE FROM mod_perfil WHERE Id_p = ?";
@@ -34,17 +44,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Registrar en la bitácora
-    $usuario = $_SESSION['usuario']; // Usuario que realiza la acción
+    $usuario = $_SESSION['nick']; // Usuario que realiza la acción
     $accion = "Actualización de módulos para el perfil: $perfil. Módulos asignados: " . implode(", ", $modulosSeleccionados);
-    $sql = "INSERT INTO bitacora (Id_u, fecha, hora, accion) VALUES (
-                (SELECT Id_u FROM usuario WHERE Nick = ?), 
-                CURDATE(), 
-                CURTIME(), 
-                ?
-            )";
+
+    // Depurar el valor de $_SESSION['usuario']
+    if (empty($usuario)) {
+        die("Error: El valor de la sesión 'usuario' está vacío.");
+    }
+
+    // Obtener el ID del usuario que realiza la acción
+    $sql = "SELECT Id_u FROM usuario WHERE Nick = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("ss", $usuario, $accion);
+    $stmt->bind_param("s", $usuario);
     $stmt->execute();
+    $result = $stmt->get_result();
+    $row = $result->fetch_assoc();
+    $id_u = $row['Id_u'] ?? null;
+    $stmt->close();
+
+    if (!$id_u) {
+        die("Error: No se encontró el usuario en la base de datos. Verifica que el valor de 'Nick' en la tabla 'usuario' coincida con '$_SESSION[usuario]'.");
+    }
+
+    // Insertar en la bitácora
+    $sql = "INSERT INTO bitacora (Id_u, fecha, hora, accion) VALUES (?, CURDATE(), CURTIME(), ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("is", $id_u, $accion);
+    if (!$stmt->execute()) {
+        die("Error al registrar en la bitácora: " . $stmt->error);
+    }
     $stmt->close();
 
     // Redirigir de vuelta a la vista

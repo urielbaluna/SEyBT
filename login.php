@@ -23,6 +23,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $_SESSION['usuario'] = $usuario['Nombre']; // Nombre del usuario
         $_SESSION['id_u'] = $usuario['Id_u']; // ID del usuario
         $_SESSION['perfil'] = $usuario['Perfil'] ?? 'No definido'; // Perfil del usuario
+        $_SESSION['nick'] = $usuario['Nick']; // Nick del usuario
         header("Location: AdmUsuario/index.php");
         exit();
     } else {
