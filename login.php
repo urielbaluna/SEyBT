@@ -36,19 +36,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <title>Login</title>
-    <link rel="stylesheet" href="css/estilo.css">
+    <link rel="stylesheet" href="./css/estilo.css">
 </head>
 <body>
-<main style="margin: auto; padding: 40px;">
-    <h2>Iniciar Sesión</h2>
-    <form method="post">
-        <label>Nick:</label><br>
-        <input type="text" name="nick" required><br><br>
-        <label>Contraseña:</label><br>
-        <input type="password" name="pwd" required><br><br>
-        <input type="submit" value="Ingresar">
-        <p style="color: red"><?= $mensaje ?></p>
-    </form>
-</main>
+    <main style="margin: auto; padding: 40px; background-color: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); width: 320px;">
+        <h2 style="text-align: center; color: #2c3e50;">Iniciar Sesión</h2>
+        <form method="post" style="text-align: center;">
+            <label for="nick">Nick:</label><br>
+            <input type="text" name="nick" id="nick" required
+                style="width: 20%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; display: block; margin-left: auto; margin-right: auto;"><br>
+
+            <label for="pwd">Contraseña:</label><br>
+            <input type="password" name="pwd" id="pwd" required
+                style="width: 20%; padding: 10px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 5px; display: block; margin-left: auto; margin-right: auto;"><br>
+
+            <input type="submit" value="Ingresar"
+                style="width: 15%; padding: 10px; background-color: #2980b9; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; display: block; margin: 0 auto;">
+
+            <p style="color: #e74c3c; text-align: center; margin-top: 15px;"><?= $mensaje ?></p>
+        </form>
+    </main>
 </body>
 </html>
