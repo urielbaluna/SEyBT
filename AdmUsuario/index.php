@@ -1,10 +1,5 @@
 <?php 
-include 'controlador.php'; 
-session_start();
-if (!isset($_SESSION['usuario'])) {
-    header("Location: ../login.php");
-    exit();
-}
+include './controlador/controlador.php'; 
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -17,14 +12,14 @@ if (!isset($_SESSION['usuario'])) {
 <aside>
     <p><strong>Bienvenido:</strong> <?= $_SESSION['usuario'] ?></p>
     <p><strong>Perfil:</strong> <?= $_SESSION['perfil'] ?? 'No definido' ?></p>
-    <a href="../AdmUsuario/index.php">AdmUsuario</a>
-    <a href="../AdmModulo/index.php">AdmModulo</a>
-    <a href="../AdmBitacora/index.php">AdmBitacora</a>
-    <a href="logout.php" style="color:red;">Cerrar sesión</a>
+    <?php foreach ($modulos as $modulo): ?>
+        <a href="<?= '/SEyBT'.$modulo['url'] ?>"><?= $modulo['nombre'] ?></a>
+    <?php endforeach; ?>
+    <a href="../logout.php" style="color:red;">Cerrar sesión</a>
 </aside>
 <main>
     <h2>Usuarios Registrados</h2>
-    <!-- boton de agregar usuario -->
+    <!-- Botón de agregar usuario -->
     <form action="agregar.php" method="post">
         <input type="submit" value="Agregar Usuario">
     </form>
@@ -39,7 +34,7 @@ if (!isset($_SESSION['usuario'])) {
             <th>Estado</th>
             <th>Acciones</th>
         </tr>
-        <?php while ($row = $usuarios->fetch_assoc()): ?>
+        <?php foreach ($usuarios as $row): ?>
         <tr>
             <td><?= $row['Id_u'] ?></td>
             <td><?= $row['Nombre'] ?></td>
@@ -48,19 +43,19 @@ if (!isset($_SESSION['usuario'])) {
             <td><?= $row['Pwd'] ?></td>
             <td><?= $row['Perfil'] ?></td>
             <td>
-                <form action="activar.php" method="post">
+                <form action="./controlador/activar_controlador.php" method="post">
                     <input type="hidden" name="id_u" value="<?= $row['Id_u'] ?>">
                     <input type="submit" value="<?= isset($row['Borrado']) && $row['Borrado'] == 1 ? 'Activar' : 'Desactivar' ?>">
                 </form>
             </td>
             <td>
-            <form action="editar.php" method="post">
-                <input type="hidden" name="id_u" value="<?= $row['Id_u'] ?>">
-                <input type="submit" value="Editar">
-            </form>
+                <form action="editar.php" method="post">
+                    <input type="hidden" name="id_u" value="<?= $row['Id_u'] ?>">
+                    <input type="submit" value="Editar">
+                </form>
             </td> 
         </tr>
-        <?php endwhile; ?>
+        <?php endforeach; ?>
     </table>
 </main>
 </body>

@@ -1,10 +1,5 @@
 <?php 
-include 'controlador.php'; 
-session_start();
-if (!isset($_SESSION['usuario'])) {
-    header("Location: ../login.php");
-    exit();
-}
+include './controlador/controlador.php'; 
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -17,32 +12,39 @@ if (!isset($_SESSION['usuario'])) {
 <aside>
     <p><strong>Bienvenido:</strong> <?= $_SESSION['usuario'] ?></p>
     <p><strong>Perfil:</strong> <?= $_SESSION['perfil'] ?? 'No definido' ?></p>
-    <a href="../AdmUsuario/index.php">AdmUsuario</a>
-    <a href="../AdmModulo/index.php">AdmModulo</a>
-    <a href="../AdmBitacora/index.php">AdmBitacora</a>
-    <a href="logout.php" style="color:red;">Cerrar sesión</a>
+    <?php foreach ($modulos as $modulo): ?>
+        <a href="<?= '/SEyBT'.$modulo['url'] ?>"><?= $modulo['nombre'] ?></a>
+    <?php endforeach; ?>
+    <a href="../logout.php" style="color:red;">Cerrar sesión</a>
 </aside>
 <main>
     <h2>Módulos Registrados</h2>
     <table>
         <tr>
             <th>Perfil</th>
-            <th>Modulos</th>
-            <th>Borrado</th>
+            <th>Módulos</th>
+            <th>Acción</th>
         </tr>
-        <?php while ($row = $modulos->fetch_assoc()): ?>
+        <?php foreach ($groupedData as $perfil => $modulos): ?>
         <tr>
-            <td><?= $row['Perfil'] ?></td>
-            <td><?= $row['Modulos'] ?></td>
+            <td><?= $perfil ?></td>
             <td>
-                <form action="activar.php" method="post">
-                    <input type="hidden" name="id_m" value="?= $row['Id_m'] ?">
-                    <input type="submit" value="<?= isset($row['Borrado']) && $row['Borrado'] == 0 ? 'Desactivar' : 'Activar' ?>">
+                <form action="./actualizar_modulos.php" method="post">
+                    <?php foreach ($modulos as $modulo): ?>
+                        <label>
+                            <input type="checkbox" name="modulos[]" value="<?= $modulo['Id_mod'] ?>" 
+                                <?= $modulo['Asignado'] ? 'checked' : '' ?>>
+                            <?= $modulo['Modulo'] ?>
+                        </label><br>
+                    <?php endforeach; ?>
+                    <input type="hidden" name="perfil" value="<?= $perfil ?>">
+            </td>
+            <td>
+                <input type="submit" value="Actualizar">
                 </form>
             </td>
         </tr>
-        
-        <?php endwhile; ?>
+        <?php endforeach; ?>
     </table>
 </main>
 </body>
