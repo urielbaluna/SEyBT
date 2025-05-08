@@ -1,10 +1,5 @@
 <?php 
-include 'controlador.php'; 
-session_start();
-if (!isset($_SESSION['usuario'])) {
-    header("Location: ../login.php");
-    exit();
-}
+include './controlador/controlador.php'; 
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -15,17 +10,19 @@ if (!isset($_SESSION['usuario'])) {
 </head>
 <body>
 <aside>
-    <p><strong>Bienvenido:</strong> <?= $_SESSION['usuario'] ?></p>
-    <p><strong>Perfil:</strong> <?= $_SESSION['perfil'] ?? 'No definido' ?></p>
-    <a href="../AdmUsuario/index.php">AdmUsuario</a>
-    <a href="../AdmModulo/index.php">AdmModulo</a>
-    <a href="../AdmBitacora/index.php">AdmBitacora</a>
-    <a href="logout.php" style="color:red;">Cerrar sesión</a>
+    <div class="bienvenida">
+        <p><strong>Bienvenido:</strong> <?= $_SESSION['usuario'] ?></p>
+        <p><strong>Perfil:</strong> <?= $_SESSION['perfil'] ?? 'No definido' ?></p>
+    </div>
+    <?php foreach ($modulos as $modulo): ?>
+        <a href="<?= '/SEyBT'.$modulo['url'] ?>"><?= $modulo['nombre'] ?></a>
+    <?php endforeach; ?>
+    <a href="../logout.php" style="color:red;">Cerrar sesión</a>
 </aside>
 <main>
     <h2>Bitácora</h2>
     <form method="GET">
-        <input type="text" name="buscar" placeholder="Buscar usuario...">
+        <input type="text" name="buscar" placeholder="Buscar usuario..." value="<?= htmlspecialchars($buscar) ?>">
         <button type="submit">Buscar</button>
     </form>
     <table>
@@ -37,7 +34,7 @@ if (!isset($_SESSION['usuario'])) {
             <th>Usuario</th>
             <th>Nick</th>
         </tr>
-        <?php while ($row = $registros->fetch_assoc()): ?>
+        <?php foreach ($registros as $row): ?>
         <tr>
             <td><?= $row['Id_b'] ?></td>
             <td><?= $row['fecha'] ?></td>
@@ -45,8 +42,14 @@ if (!isset($_SESSION['usuario'])) {
             <td><?= $row['accion'] ?></td>
             <td><?= $row['Nombre'] ?></td>
             <td><?= $row['Nick'] ?></td>
+            <td>
+                <form action="eliminar.php" method="POST" style="margin: 0;">
+                    <input type="hidden" name="id_b" value="<?= $row['Id_b'] ?>">
+                    <button type="submit" style="color: red; border: none; background: none; cursor: pointer;">Eliminar</button>
+                </form>
+            </td>
         </tr>
-        <?php endwhile; ?>
+        <?php endforeach; ?>
     </table>
 </main>
 </body>
