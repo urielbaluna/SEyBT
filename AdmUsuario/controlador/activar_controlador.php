@@ -23,14 +23,8 @@ if ($id_u) {
     $accion = ($nuevo_estado == '0') ? 'Activar' : 'Desactivar'; // Determinar la acción
 
     if (actualizarEstadoUsuario($conn, $id_u, $nuevo_estado)) {
-        // Obtener el ID del usuario que realizó la acción desde la sesión
-        $usuario_sesion = obtenerIdUsuarioSesion($conn, $_SESSION['usuario']);
-        if (!$usuario_sesion) {
-            die("Error: No se encontró un usuario en la sesión con el nombre: " . $_SESSION['usuario']);
-        }
-
         // Registrar la acción en la bitácora
-        registrarBitacora($conn, $accion, $usuario_sesion['Id_u']);
+        registrarBitacora($conn, $accion, $_SESSION['id_u']);
 
         header("Location: ../index.php?success=1");
         exit();

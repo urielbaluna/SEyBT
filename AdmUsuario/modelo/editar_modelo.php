@@ -1,6 +1,9 @@
 <?php
 function obtenerUsuarioPorId($conn, $id_u) {
-    $sql = "SELECT * FROM usuario WHERE Id_u = ?";
+    $sql = "SELECT usuario.id_u, persona.Nombre, usuario.Nick, persona.Edad, usuario.Pwd, usuario.Id_p
+            FROM usuario
+            LEFT JOIN persona ON usuario.Id_person = persona.id
+            WHERE usuario.Id_u = ? AND persona.Borrado = 0";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('i', $id_u);
     $stmt->execute();
@@ -19,10 +22,24 @@ function obtenerPerfiles($conn) {
 }
 
 function actualizarUsuario($conn, $id_u, $nombre, $nick, $edad, $pwd, $perfil) {
-    $sql = "UPDATE usuario SET Nombre = ?, Nick = ?, Edad = ?, Pwd = ?, Id_p = ? WHERE Id_u = ?";
+    // Actualizar persona
+    $sql0 = "UPDATE persona SET Nombre = ?, Edad = ? WHERE id = (SELECT Id_person FROM usuario WHERE id_u = ?)";
+    $stmt0 = $conn->prepare($sql0);
+    $stmt0->bind_param('ssi', $nombre, $edad, $id_u);
+    if (!$stmt0->execute()) {
+        $stmt0->close();
+        return false;
+    }
+    $stmt0->close();
+
+    // Actualizar usuario
+    $sql = "UPDATE usuario SET Nick = ?, Pwd = ?, Id_p = ? WHERE id_u = ?";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param('ssissi', $nombre, $nick, $edad, $pwd, $perfil, $id_u);
-    return $stmt->execute();
+    $stmt->bind_param('ssii', $nick, $pwd, $perfil, $id_u);
+    $result = $stmt->execute();
+    $stmt->close();
+
+    return $result;
 }
 
 function registrarBitacora($conn, $accion, $id_u) {

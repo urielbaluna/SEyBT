@@ -10,15 +10,11 @@ function obtenerPerfiles($conn) {
 }
 
 function agregarUsuario($conn, $nombre, $nick, $edad, $pwd, $perfil) {
-    // Obtener el último ID de usuario
-    $result = $conn->query("SELECT MAX(Id_u) AS max_id FROM usuario");
-    $row = $result->fetch_assoc();
-    $last_id = (int)$row['max_id'] + 1;
 
-    // Insertar el nuevo usuario
-    $sql = "INSERT INTO usuario (Id_u, Nombre, Nick, Edad, Pwd, Id_p, Borrado) VALUES (?, ?, ?, ?, ?, ?, 0)";
+    // Insertar el nuevo usuario con un procedimiento almacenado
+    $sql = "CALL RegistrarUsuario(?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param('issisi', $last_id, $nombre, $nick, $edad, $pwd, $perfil);
+    $stmt->bind_param('sisssi', $nombre, $edad, $nick, $nick, $pwd, $perfil);
     return $stmt->execute();
 }
 

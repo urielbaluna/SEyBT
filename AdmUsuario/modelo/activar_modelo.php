@@ -16,7 +16,7 @@ function actualizarEstadoUsuario($conn, $id_u, $nuevo_estado) {
 }
 
 function obtenerIdUsuarioSesion($conn, $usuario) {
-    $sql = "SELECT Id_u FROM usuario WHERE nombre = ?";
+    $sql = "SELECT id FROM persona WHERE nombre = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('s', $usuario);
     $stmt->execute();

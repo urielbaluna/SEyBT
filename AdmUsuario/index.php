@@ -10,8 +10,10 @@ include './controlador/controlador.php';
 </head>
 <body>
 <aside>
-    <p><strong>Bienvenido:</strong> <?= $_SESSION['usuario'] ?></p>
-    <p><strong>Perfil:</strong> <?= $_SESSION['perfil'] ?? 'No definido' ?></p>
+    <div class="bienvenida">
+        <p><strong>Bienvenido:</strong> <?= $_SESSION['usuario'] ?></p>
+        <p><strong>Perfil:</strong> <?= $_SESSION['perfil'] ?? 'No definido' ?></p>
+    </div>
     <?php foreach ($modulos as $modulo): ?>
         <a href="<?= '/SEyBT'.$modulo['url'] ?>"><?= $modulo['nombre'] ?></a>
     <?php endforeach; ?>
@@ -19,7 +21,6 @@ include './controlador/controlador.php';
 </aside>
 <main>
     <h2>Usuarios Registrados</h2>
-    <!-- Botón de agregar usuario -->
     <form action="agregar.php" method="post">
         <input type="submit" value="Agregar Usuario">
     </form>

@@ -14,9 +14,9 @@ include './controlador/editar_controlador.php';
     <?php if (isset($error)): ?>
         <p style="color: red;"><?= $error ?></p>
     <?php endif; ?>
-    <p><strong>Usuario a editar:</strong> <?= $user['Nombre'] ?? 'Desconocido' ?> (ID: <?= $user['Id_u'] ?? 'N/A' ?>)</p>
+    <p><strong>Usuario a editar:</strong> <?= $user['Nombre'] ?? 'Desconocido' ?> (ID: <?= $user['id_u'] ?? 'N/A' ?>)</p>
     <form action="editar.php" method="post">
-        <input type="hidden" name="id_u" value="<?= $user['Id_u'] ?? '' ?>">
+        <input type="hidden" name="id_u" value="<?= $user['id_u'] ?? '' ?>">
         <label for="nombre">Nombre:</label>
         <input type="text" id="nombre" name="nombre" value="<?= $user['Nombre'] ?? '' ?>" required>
         <br>

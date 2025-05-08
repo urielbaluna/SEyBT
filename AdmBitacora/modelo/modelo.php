@@ -17,12 +17,15 @@ function obtenerModulosPorPerfil($conn, $perfil) {
 }
 
 function obtenerRegistrosBitacora($conn, $buscar = null) {
-    $sql = "SELECT bitacora.Id_b, bitacora.fecha, bitacora.hora, bitacora.accion, usuario.Nombre, usuario.Nick 
-            FROM bitacora 
-            INNER JOIN usuario ON bitacora.Id_u = usuario.Id_u";
+    $sql = "SELECT bitacora.Id_b, bitacora.fecha, bitacora.hora, bitacora.accion, persona.nombre AS Nombre, usuario.Nick 
+            FROM bitacora
+            LEFT JOIN usuario ON bitacora.id_u = usuario.Id_u
+            LEFT JOIN persona ON usuario.Id_person = persona.id
+            WHERE bitacora.fecha = CURDATE() AND persona.Borrado = 0";
     if ($buscar) {
-        $sql .= " WHERE usuario.Nombre LIKE ? OR usuario.Nick LIKE ?";
+        $sql .= " AND (persona.nombre LIKE ? OR usuario.Nick LIKE ?)";
     }
+    $sql .= " ORDER BY bitacora.Id_b DESC";
     $stmt = $conn->prepare($sql);
     if ($buscar) {
         $buscar = "%$buscar%";

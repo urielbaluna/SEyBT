@@ -17,9 +17,15 @@ function obtenerModulosPorPerfil($conn, $perfil) {
 }
 
 function obtenerUsuarios($conn) {
-    $sql = "SELECT usuario.Id_u, usuario.Nombre, usuario.Nick, usuario.Edad, usuario.Pwd, usuario.Borrado, perfil.Nombre AS Perfil
+    // $sql = "SELECT usuario.Id_u, usuario.Nombre, usuario.Nick, usuario.Edad, usuario.Pwd, usuario.Borrado, perfil.Nombre AS Perfil
+    //         FROM usuario
+    //         LEFT JOIN perfil ON usuario.Id_p = perfil.Id_p";
+    $sql = "SELECT usuario.Id_u, persona.Nombre, usuario.Nick, persona.Edad, usuario.Pwd, usuario.Borrado, perfil.Nombre AS Perfil
             FROM usuario
-            LEFT JOIN perfil ON usuario.Id_p = perfil.Id_p";
+            LEFT JOIN persona ON usuario.Id_person = persona.id
+            LEFT JOIN perfil ON usuario.Id_p = perfil.Id_p
+            WHERE persona.Borrado = 0
+            ORDER BY usuario.Id_u DESC";
     $result = $conn->query($sql);
     $usuarios = [];
     while ($row = $result->fetch_assoc()) {

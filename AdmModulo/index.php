@@ -10,8 +10,10 @@ include './controlador/controlador.php';
 </head>
 <body>
 <aside>
-    <p><strong>Bienvenido:</strong> <?= $_SESSION['usuario'] ?></p>
-    <p><strong>Perfil:</strong> <?= $_SESSION['perfil'] ?? 'No definido' ?></p>
+    <div class="bienvenida">
+        <p><strong>Bienvenido:</strong> <?= $_SESSION['usuario'] ?></p>
+        <p><strong>Perfil:</strong> <?= $_SESSION['perfil'] ?? 'No definido' ?></p>
+    </div>
     <?php foreach ($modulos as $modulo): ?>
         <a href="<?= '/SEyBT'.$modulo['url'] ?>"><?= $modulo['nombre'] ?></a>
     <?php endforeach; ?>
