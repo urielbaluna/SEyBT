@@ -21,7 +21,7 @@ function obtenerRegistrosBitacora($conn, $buscar = null) {
             FROM bitacora
             LEFT JOIN usuario ON bitacora.id_u = usuario.Id_u
             LEFT JOIN persona ON usuario.Id_person = persona.id
-            WHERE bitacora.fecha = CURDATE() AND persona.Borrado = 0";
+            WHERE persona.Borrado = 0";
     if ($buscar) {
         $sql .= " AND (persona.nombre LIKE ? OR usuario.Nick LIKE ?)";
     }

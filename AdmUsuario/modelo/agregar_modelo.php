@@ -9,12 +9,12 @@ function obtenerPerfiles($conn) {
     return $perfiles;
 }
 
-function agregarUsuario($conn, $nombre, $nick, $edad, $pwd, $perfil) {
+function agregarUsuario($conn, $nombre, $nick, $email, $edad, $pwd, $perfil) {
 
     // Insertar el nuevo usuario con un procedimiento almacenado
     $sql = "CALL RegistrarUsuario(?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param('sisssi', $nombre, $edad, $nick, $nick, $pwd, $perfil);
+    $stmt->bind_param('sisssi', $nombre, $edad, $email, $nick, $pwd, $perfil);
     return $stmt->execute();
 }
 

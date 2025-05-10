@@ -21,6 +21,9 @@ include './controlador/agregar_controlador.php';
         <label for="nick">Nick:</label>
         <input type="text" id="nick" name="nick" required>
         <br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <br>
         <label for="edad">Edad:</label>
         <input type="number" id="edad" name="edad" required>
         <br>
