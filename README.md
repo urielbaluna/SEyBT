@@ -14,3 +14,4 @@ Plataforma para el departamento de Seguimiento de Egresados y Bolsa de Trabajo d
 
 -Uriel Barrera Luna [@urielbaluna](https://www.github.com/urielbaluna)
 -Others
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/urielbaluna/SEyBT)
